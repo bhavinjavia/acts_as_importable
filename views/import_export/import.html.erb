@@ -1,7 +1,7 @@
 <h1>Import <%=controller.controller_name.capitalize%></h1>
 
 
-<% form_tag "/#{controller.controller_name}/upload", 
+<% form_tag url_for(:action  => "upload"),
             :multipart => true, :onsubmit => "Element.show('loading')" do %>
   <% unless @formats.blank? %>
     <div style="margin:10px 0 10px 0;">

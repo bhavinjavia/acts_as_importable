@@ -56,10 +56,10 @@ module ImportExport
         else
           flash[:error] = "Error! Invalid file, please select a csv file."
         end
-        if params[:format]
-          redirect_to "/#{self.controller_name}/import?format=#{params[:format]}"
+        if params[:format].present?
+          redirect_to url_for(:action  => "import", :format => params[:format])
         else
-          redirect_to "/#{self.controller_name}/import"
+          redirect_to url_for(:action  => "import")
         end
       end
 
