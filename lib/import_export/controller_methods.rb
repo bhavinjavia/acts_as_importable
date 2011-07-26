@@ -37,7 +37,7 @@ module ImportExport
         if File.exists? filename
           begin
             @new_objects = self.class.model_class.import(filename, context)
-            flash[:notice] = "Import Successful - Imported #{@new_objects.length} #{self.class.model_class.name.underscore.humanize.pluralize}"
+            flash[:notice] = "Import Successful - Imported #{@new_objects.length} #{self.class.model_class.model_name.human.pluralize}"
           rescue Exception => e
             logger.error flash[:alert] = "Import Failed - No records imported due to errors. #{e}"
           ensure

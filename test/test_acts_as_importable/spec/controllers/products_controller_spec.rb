@@ -40,6 +40,14 @@ describe ProductsController do
       response.should render_template("import")
     end
 
+    it "should flash number of items imported on success" do
+      product = Product.create!(:name => "iPhone 4", :price => 399.99)
+      filename = create_test_file([product])
+      Product.expects(:import).returns([product])
+      get 'import'
+      flash[:notice].should == "Import Successful - Imported 1 Products"
+    end
+
     it "should flash alert on failure" do
       product = Product.create!(:name => "iPhone 4", :price => 399.99)
       filename = create_test_file([product])
