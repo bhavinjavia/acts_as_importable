@@ -23,7 +23,7 @@ module ImportExport
 
     module InstanceMethods
       def export
-        send_data self.class.model_class.export, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=#{export_file_name}"   
+        send_data self.class.model_class.export, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=#{export_file_name}"
       end
 
       def import
