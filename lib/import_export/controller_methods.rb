@@ -39,7 +39,7 @@ module ImportExport
             @new_objects = self.class.model_class.import(filename, context)
             flash[:notice] = "Import Successful - Imported #{@new_objects.length} #{self.class.model_class.name.underscore.humanize.pluralize}"
           rescue Exception => e
-            logger.error flash[:error] = "Import Failed - No records imported due to errors. #{e}"
+            logger.error flash[:alert] = "Import Failed - No records imported due to errors. #{e}"
           ensure
             File.delete(filename)
           end
@@ -54,7 +54,7 @@ module ImportExport
           FileUtils.makedirs "#{UPLOADS_PATH}"
           File.open(upload_file_name, "wb") { |f| f.write(params[:csv_file].read)}
         else
-          flash[:error] = "Error! Invalid file, please select a csv file."
+          flash[:alert] = "Error! Invalid file, please select a csv file."
         end
         if params[:format].present?
           redirect_to url_for(:action  => "import", :format => params[:format])
