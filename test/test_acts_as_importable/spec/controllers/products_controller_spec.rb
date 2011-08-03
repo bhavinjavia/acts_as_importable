@@ -72,10 +72,17 @@ describe ProductsController do
   end
 
   describe "GET 'export'" do
+    let(:store) { Store.create!(:name => 'iTunes Store') }
+
     it "should send csv file" do
       get 'export'
       response.headers["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
       response.headers["Content-Disposition"].should include("attachment")
+    end
+
+    it "should pass a :scoped context value to model.export" do
+      Product.expects(:export).with(has_entry(:scoped => store)).returns([])
+      get 'export'
     end
   end
 end

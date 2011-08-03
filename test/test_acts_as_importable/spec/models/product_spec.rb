@@ -171,4 +171,30 @@ describe Product do
       end
     end
   end
+
+  describe "export" do
+    let(:category) { Category.create!(:name => 'Mobiles') }
+    let(:store1) { Store.create!(:name => 'iTunes Store') }
+    let(:store2) { Store.create!(:name => 'Apple Store') }
+
+    it "should return all products as csv" do
+      product1 = Product.create!(:name => "iPhone 4", :price => 399.99, :store => store1, :category => category)
+      product2 = Product.create!(:name => "iPhone 3GS", :price => 299.99, :store => store2, :category => category)
+
+      csv = Product.export({})
+      csv.should include [product1.name, product1.price, product1.category.try(:name)].join(',')
+      csv.should include [product2.name, product2.price, product2.category.try(:name)].join(',')
+    end
+
+    it "should return all products under given store as csv" do
+      product1 = Product.create!(:name => "iPhone 4", :price => 399.99, :store => store1, :category => category)
+      product2 = Product.create!(:name => "iPhone 3GS", :price => 299.99, :store => store2, :category => category)
+      product3 = Product.create!(:name => "Nexus", :price => 299.99, :category => category)
+
+      csv = Product.export({:scoped => store1})
+      csv.should include [product1.name, product1.price, product1.category.name].join(',')
+      csv.should_not include [product2.name, product2.price, product2.category.name].join(',')
+      csv.should_not include [product3.name, product3.price, product3.category.name].join(',')
+    end
+  end
 end

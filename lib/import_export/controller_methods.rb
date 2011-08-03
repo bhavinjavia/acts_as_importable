@@ -23,7 +23,9 @@ module ImportExport
 
     module InstanceMethods
       def export
-        send_data self.class.model_class.export, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=#{export_file_name}"
+        context = self.class.context.clone
+        context[:scoped] = self.send(context[:scoped]) if context[:scoped].present?
+        send_data self.class.model_class.export(context), :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=#{export_file_name}"
       end
 
       def import

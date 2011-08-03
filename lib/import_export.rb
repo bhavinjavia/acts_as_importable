@@ -87,12 +87,14 @@ module ImportExport
         return collection
       end
 
-      def export
+      def export(context)
         export_fields = self.import_fields || self.export_fields
         ImportExport::CSV.generate do |csv|
           csv << export_fields.map{|f| f.split('.')[0]}
 
-          self.find_each(:batch_size => 2000) do |element|
+          scope_object = context[:scoped]
+          object = scope_object ? scope_object.send(self.table_name) : self
+          object.find_each(:batch_size => 2000) do |element|
             collection = []
             export_fields.each do |field_name|
               begin
